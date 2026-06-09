@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GimmieAI · Case study — Ritik Singh</title>
+<meta name="description" content="Some of what I built on Gimmie: gift search, embedded auth, billing, and referrals." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css?v=7" />
+</head>
+<body>
+
+<!-- ===================== SHADER + VEIL ===================== -->
+<canvas id="shader-canvas"></canvas>
+<div class="veil"></div>
+
+<!-- ===================== CURSOR ===================== -->
+<div class="cursor-ring"></div>
+<div class="cursor-dot"></div>
+<div class="cursor-label"></div>
+
+<!-- ===================== SCROLL PROGRESS ===================== -->
+<div class="scroll-progress"></div>
+
+<!-- ===================== HEADER ===================== -->
+<header class="site-header">
+  <a href="index.html" class="brand"><span class="blip"></span>Ritik Singh</a>
+  <nav class="head-nav">
+    <a href="index.html#work" class="nav-link">Work</a>
+    <a href="index.html#projects" class="nav-link">Projects</a>
+    <a href="index.html" class="nav-cta" data-magnetic="0.3">Back to portfolio</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="cs-hero">
+    <div class="wrap">
+      <a href="index.html" class="cs-back" data-magnetic="0.2"><span class="arr">←</span> Ritik Singh</a>
+      <div class="eyebrow" style="margin:26px 0 22px">Case study · GimmieAI · Founding Engineer</div>
+      <h1 class="cs-title">Some of what I built on Gimmie.</h1>
+      <p class="cs-lede">These are some of the things I am proud of here. Not all of it, just the parts that matter. I am the <strong>only engineer on the consumer side</strong>, so I take features from idea to launch, then live with them in production.</p>
+    </div>
+  </section>
+
+  <!-- ===================== CONTEXT ===================== -->
+  <section style="padding-top:0">
+    <div class="wrap cs-context reveal">
+      <p>A lot of the real work is the small stuff that never shows up in a demo. <b>Forward compatibility</b>, so a change I ship today does not break an older app version still out in the wild. <b>Idempotency</b>, so a webhook that fires twice does not count twice. Handling the case where two things happen at the exact same moment. I care about those, and this job gave me the room to do them right.</p>
+    </div>
+  </section>
+
+  <!-- ===================== BLOCK 1 · GIFT SEARCH ===================== -->
+  <section style="padding-top:0; padding-bottom:0">
+    <div class="wrap">
+
+      <div class="cs-block">
+        <div class="cs-block-head">
+          <div class="cs-kicker">01 · The hard one</div>
+          <h2>Gift search</h2>
+        </div>
+        <div class="cs-body reveal">
+          <div class="flow">
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><span class="flab">Request</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9z"/></svg></span><span class="flab">Plan</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="18" r="2.4"/><path d="M8.4 6h7M6 8.4v7M18 8.4v7M8.4 18h7"/></svg></span><span class="flab">Fan out</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg></span><span class="flab">Merge</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 18V9M10 18V5M16 18v-6M22 18V8"/></svg></span><span class="flab">Rank</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/></svg></span><span class="flab">Cache</span></div>
+          </div>
+          <p>The hardest feature is search. You give Gimmie a loose idea, like <b>a gift for my mom who loves gardening</b>, and it has to come back with real products you can actually buy.</p>
+          <p>A Claude planner reads the request and what we know about the person, then writes a search plan. We do not just throw your words at a store. We shape the search differently per store, because each store has its own way that people search on it.</p>
+          <p class="cs-pull">Then we fan out to several stores at once and pull everything back into one shape.</p>
+          <p>We remove duplicates across stores, and we rank the results so no single store takes over the page. We cache so a second visit is fast, and there is a regenerate option that gives you fresh ideas without repeating what it already showed you.</p>
+        </div>
+      </div>
+
+      <!-- ===================== BLOCK 2 · EMBEDDED AUTH ===================== -->
+      <div class="cs-block">
+        <div class="cs-block-head">
+          <div class="cs-kicker">02 · The fun problem</div>
+          <h2>Auth inside an iframe</h2>
+        </div>
+        <div class="cs-body reveal">
+          <div class="flow">
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11V7a3 3 0 016 0v4"/><rect x="5" y="11" width="14" height="9" rx="2"/></svg></span><span class="flab">Click provider</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18"/></svg></span><span class="flab">Popup</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span><span class="flab">Login</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v11H8l-4 4z"/></svg></span><span class="flab">postMessage</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0112 0v1"/></svg></span><span class="flab">Set session</span></div>
+          </div>
+          <p>Gimmie also ships a widget that merchants drop into their own Shopify store. That created a fun auth problem.</p>
+          <p>The widget runs inside the merchant site, in an iframe. Login with Google or Apple will not run in an iframe, the providers block it. So when you click a provider, we open a popup instead. The popup finishes login on our own domain, then hands the session back to the widget.</p>
+          <p>The catch is that the widget and the popup are on different domains. My first idea was <code>BroadcastChannel</code>, but it only talks same origin. So I used <code>window.opener.postMessage</code>, which works across origins. The popup posts the session back, the widget listens, and I check the message type so the widget only trusts our own messages. Auth and the widget data also live in <b>two separate Supabase projects</b>, so the popup finishes auth on one and the widget sets the session on the other.</p>
+        </div>
+      </div>
+
+      <!-- ===================== BLOCK 3 · BILLING ===================== -->
+      <div class="cs-block">
+        <div class="cs-block-head">
+          <div class="cs-kicker">03 · Getting paid</div>
+          <h2>Billing for the SaaS</h2>
+        </div>
+        <div class="cs-body reveal">
+          <div class="flow">
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span><span class="flab">One config</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></span><span class="flab">Atomic count</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="flab">Commission</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 16l5-5 4 4 8-8"/><path d="M3 20h18"/></svg></span><span class="flab">Hard cap</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 010-4h12v4"/><path d="M4 6v12a2 2 0 002 2h14v-4"/></svg></span><span class="flab">Credits</span></div>
+          </div>
+          <p>The widget is a paid product, so I built the billing too. There are a few plans, and each includes a set number of chats per month. Past that, we charge a usage based commission, with a <b>hard cap</b> so a merchant is never surprised by the bill. All of it comes from one config, so the price, the limits, and the commission never drift apart.</p>
+          <p class="cs-pull">Two shoppers can chat at the same moment, so I count each chat with one atomic database step. Two at once cannot double count, or lose a count.</p>
+          <p>There are also referral credits, where a merchant earns free months and the commission still keeps working underneath.</p>
+        </div>
+      </div>
+
+      <!-- ===================== BLOCK 4 · REFERRALS ===================== -->
+      <div class="cs-block">
+        <div class="cs-block-head">
+          <div class="cs-kicker">04 · How it grows</div>
+          <h2>Referrals, invites, notifications</h2>
+        </div>
+        <div class="cs-body reveal">
+          <div class="flow">
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0112 0v1"/></svg></span><span class="flab">Referrer</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007 0l2-2a5 5 0 00-7-7l-1 1"/><path d="M14 11a5 5 0 00-7 0l-2 2a5 5 0 007 7l1-1"/></svg></span><span class="flab">Web bridge</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/><path d="M10 12h4"/></svg></span><span class="flab">Connect</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v6M12 9l-4 4M12 9l4 4M5 21h14"/></svg></span><span class="flab">Fan out</span></div>
+            <div class="flow-step"><span class="fdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M10.3 21a1.9 1.9 0 003.4 0"/></svg></span><span class="flab">Bell + push</span></div>
+          </div>
+          <p>This is how Gimmie grows, so I kept it as its own thing. Every user becomes their own referrer. When you invite someone and they join, we connect the two of you right away and let you know.</p>
+          <p>The attribution changed over time, and that part I like. We started on Branch for mobile, because a link has to survive an app install and still know who sent it. Later we moved to Tapfiliate. Tapfiliate is built around the web, so to make it work for app installs I put <b>a small web page in the middle</b>. A shared link now lands on that page first. The page registers the click with Tapfiliate, then deep links you into the app. So a mobile invite still gets proper credit, even though the tracking lives on the web.</p>
+          <p>Notifications run on a <b>fan out on write</b> model. When something happens, I write one notification per person right then, instead of working it out later when they open the app. The in app bell updates live, and mobile gets a push. Follows go through a single database trigger, so it fires the same way whether you followed someone yourself or got auto followed from an invite. And a new notification type needs no database change. An older app that does not know that type still shows a plain card instead of breaking. That last part is the forward compatibility I mentioned up top.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== CTA ===================== -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="cs-cta reveal">
+        <div class="eyebrow">That is some of it</div>
+        <h2 class="sec-title" style="max-width:18ch">There is more in the product itself.</h2>
+        <div class="hero-meta">
+          <a href="index.html" class="btn" data-magnetic="0.35"><span class="arr">←</span> Back to portfolio</a>
+          <a href="mailto:ritik224@gmail.com" class="btn ghost" data-magnetic="0.35">Get in touch</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="shader.js?v=7"></script>
+<script src="app.js?v=9"></script>
+
+</body>
+</html>
