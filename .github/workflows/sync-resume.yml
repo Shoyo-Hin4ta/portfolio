@@ -1,0 +1,53 @@
+name: Sync résumé from Drive
+
+on:
+  schedule:
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-resume
+
+env:
+  DOC_ID: 1W3kkvdQoPNuUZ-L_6iLXQYSNwnksKmA5
+  TARGET: assets/Ritik-Singh-Resume.pdf
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download latest export from Drive
+        run: |
+          curl -fsSL --retry 3 --retry-delay 5 --max-time 120 \
+            "https://docs.google.com/document/d/${DOC_ID}/export?format=pdf" \
+            -o fetched.pdf
+
+          if [ ! -s fetched.pdf ]; then
+            echo "::error::Drive returned an empty file."
+            exit 1
+          fi
+
+          if [ "$(head -c 4 fetched.pdf)" != "%PDF" ]; then
+            echo "::error::Drive did not return a PDF. Confirm the document is still shared as 'Anyone with the link'."
+            exit 1
+          fi
+
+      - name: Commit when the résumé changed
+        run: |
+          if cmp -s fetched.pdf "$TARGET"; then
+            echo "Résumé is already up to date."
+            exit 0
+          fi
+
+          mv fetched.pdf "$TARGET"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$TARGET"
+          git commit -m "Sync résumé from Drive"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+          echo "Résumé updated and pushed."
