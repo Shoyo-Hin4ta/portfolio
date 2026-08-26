@@ -39,7 +39,12 @@ jobs:
 
       - name: Commit when the résumé changed
         run: |
-          if cmp -s fetched.pdf "$TARGET"; then
+          content_hash() {
+            perl -0777 -pe 's{\(Skia/PDF m\d+ Google Docs Renderer\)}{(Skia/PDF Google Docs Renderer)}' "$1" \
+              | sha256sum | cut -d' ' -f1
+          }
+
+          if [ "$(content_hash fetched.pdf)" = "$(content_hash "$TARGET")" ]; then
             echo "Résumé is already up to date."
             exit 0
           fi
